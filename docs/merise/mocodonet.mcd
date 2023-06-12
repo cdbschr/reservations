@@ -1,0 +1,23 @@
+ROOM: id, name, places
+HAS2, 11 AREA, 1N ROOM
+:
+:
+:
+
+HAS1, 11 ROOM, 1N BUILDING
+AREA: id, name, places
+HAS3, 1N AREA, 11 LOCATION
+LOCATION: place_number
+HAS BEEN BOOKED, 0N LOCATION, 11 RESERVATION
+
+BUILDING: id, name
+:
+ROLE: id, name
+DEFINE, 0N USER, 11 ROLE
+RESERVATION: id, date_start, date_end, created_at
+
+:
+:
+:
+USER: id, email, trigram, created_at
+HAS BOOKED, 0N USER, 11 RESERVATION
