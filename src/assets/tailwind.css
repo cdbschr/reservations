@@ -4,6 +4,10 @@
 
 @layer base {
   body {
-    @apply bg-white;
+    @apply m-0;
+  }
+
+  #app {
+    @apply w-full;
   }
 }

@@ -22,7 +22,7 @@ export default defineComponent({
 
 <template>
   <div class="flex my-5">
-    <h1 class="text-2xl font-semibold">
+    <h1 class="mx-3 text-2xl font-semibold">
       <span class="border-b border-black">{{ underlinedText }}</span>
       <span>{{ remainingText }}</span>
     </h1>
