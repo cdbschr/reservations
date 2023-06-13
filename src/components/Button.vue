@@ -8,9 +8,13 @@ export default defineComponent({
       type: String as PropType<string>,
       default: "",
     },
-    color: {
+    textColor: {
       type: String as PropType<string>,
-      default: "primary",
+      default: "text-primary",
+    },
+    borderClass: {
+      type: String as PropType<string>,
+      default: "border-2 border-primary",
     },
   },
   computed: {
@@ -20,15 +24,12 @@ export default defineComponent({
       }
       return "";
     },
-    borderClass(): string {
-      return `border-2 border-color-${this.color}`;
-    },
   },
 });
 </script>
 
 <template>
-  <button :class="`hover:text-${color} font-bold py-2 px-4 rounded ${widthClass} ${borderClass}`">
+  <button :class="`${textColor} font-bold py-2 px-4 my-3 rounded ${widthClass} ${borderClass}`">
     <slot/>
   </button>
 </template>

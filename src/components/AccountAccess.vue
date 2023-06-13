@@ -9,36 +9,42 @@ export default {
   setup() {
     const isPopoverVisible = ref(false);
 
-    const showPopover = () => {
-      isPopoverVisible.value = true;
-    };
-
-    const hidePopover = () => {
-      isPopoverVisible.value = false;
+    const togglePopover = () => {
+      isPopoverVisible.value = !isPopoverVisible.value;
     };
 
     return {
       isPopoverVisible,
-      showPopover,
-      hidePopover,
+      togglePopover,
     };
   },
 };
 </script>
 
-
 <template>
   <div 
-    class="relative" 
-    @mouseenter="showPopover" 
-    @mouseleave="hidePopover"
+    class="relative inline-block" 
+    @click="togglePopover"
   >
-    <AccountIcon color="#D1D1D1" size="100"/>
+    <AccountIcon color="#1E1E1E" size="50"/>
     <div 
       v-show="isPopoverVisible" 
-      class="absolute bg-white text-black text-center py-2 px-4 rounded shadow-lg bottom-10"
+      class="absolute right-[5px] mt-2 bg-[#f9f9fa] text-primary text-center py-2 px-4 rounded shadow-lg popover"
     >
       Deconnexion
     </div>
   </div>
 </template>
+
+<style scoped>
+.popover::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #f9f9fa;
+  filter: drop-shadow(0 -1px 1px rgba(0, 0, 0, 0.1));
+}
+</style>

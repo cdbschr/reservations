@@ -5,14 +5,16 @@
   import InputDate from "./components/InputDate.vue";
   import Account from "./components/AccountAccess.vue";
   import ModalePage from "./components/ModalePage.vue";
-  import FooterApp from "./layouts/FooterApp.vue";
+  import Header from "./layouts/HeaderApp.vue";
+  import Footer from "./layouts/FooterApp.vue";
 
   const showModal = ref(false);
   const toggleModal = () => showModal.value = !showModal.value;
 </script>
 
 <template>
-  <Button width="1/2" color="lime-300" @click="toggleModal">Test</Button>
+  <Header />
+  <Button width="1/2" text-color="text-primary" border-class="border-2 border-primary" @click="toggleModal">Test</Button>
   <Account />
   <Title text="Coucou" />
   <Title text="Bonjour je m'appelle" />
@@ -32,6 +34,6 @@
       <option value="goldfish">Goldfish</option>
     </select>
   </form>
-  <FooterApp />
+  <Footer />
   <ModalePage v-model="showModal"><p>Test</p></ModalePage>
 </template>
