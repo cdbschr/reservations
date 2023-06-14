@@ -17,18 +17,44 @@ export default defineComponent({
       type: Array as PropType<SelectOption[]>,
       required: true,
     },
+    modelValue: {
+      type: String as PropType<string>,
+      required: false,
+    },
+  },
+  data() {
+    return {
+      selected: this.modelValue,
+    };
   },
   computed: {
     id(): string {
       return `${this.name}-select`;
     },
   },
+  watch: {
+    modelValue(newVal) {
+      this.selected = newVal;
+    },
+  },
+  methods: {
+    emitChange() {
+      this.$emit('update:modelValue', this.selected);
+    },
+  },
 });
 </script>
 
+
 <template>
-  <select :id="id" :name="name" class="form-select block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-    <option disabled selected> Veuillez sélectionner une {{ name }} </option>
+  <select 
+    :id="id" 
+    v-model="selected" 
+    :name="name" 
+    class="form-select block w-full py-2 px-3 border border-gray-500 bg-white rounded-md shadow-sm focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
+    @change="emitChange">
+    <option disabled value=""> Veuillez sélectionner une {{ name }} </option>
     <option v-for="item in data" :key="item.value" :value="item.value">{{ item.text }}</option>
   </select>
 </template>
+

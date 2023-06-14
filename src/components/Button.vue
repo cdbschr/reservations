@@ -16,6 +16,10 @@ export default defineComponent({
       type: String as PropType<string>,
       default: "border-2 border-primary",
     },
+    type: {
+      type: String as PropType<"button" | "submit" | "reset">,
+      default: "button",
+    }
   },
   computed: {
     widthClass(): string {
@@ -29,7 +33,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <button :class="`${textColor} font-bold py-2 px-4 my-3 rounded ${widthClass} ${borderClass}`">
+  <button :type="type" :class="`${textColor} font-bold py-2 px-4 my-3 rounded ${widthClass} ${borderClass}`">
     <slot/>
   </button>
 </template>

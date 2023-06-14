@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <header class="flex items-center justify-between px-4 py-2">
+  <header class="flex items-center justify-between px-5 pt-5">
     <a href="/">
       <h1 class="text-2xl font-bold text-gray-700">OSR</h1>
     </a>

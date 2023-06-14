@@ -37,11 +37,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
-    <h2>{{ displayDate }}</h2>
-    <div class="card">
-      <div>Area: {{ reservation.areaName }}</div>
-      <div>Places: {{ reservation.placeNumber }}</div>
+  <h2 class="text-lg font-bold mt-2 px-4">{{ displayDate }}</h2>
+  <div class="w-full sm:w-1/3 p-2">
+    <div class="bg-white rounded-lg p-4 shadow-md">
+      <div class="flex justify-around text-gray-600">
+        <p class="text-base">{{ reservation.areaName }}</p>
+        <p class="font-black text-xl">{{ reservation.placeNumber }}</p>
+      </div>
     </div>
   </div>
 </template>

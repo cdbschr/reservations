@@ -21,7 +21,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="flex my-5">
+  <div class="flex mt-5 mb-10">
     <h1 class="mx-3 text-2xl font-semibold">
       <span class="border-b border-black">{{ underlinedText }}</span>
       <span>{{ remainingText }}</span>

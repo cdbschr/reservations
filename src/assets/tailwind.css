@@ -6,6 +6,10 @@
   body {
     @apply m-0;
   }
+  
+  main {
+    @apply p-3;
+  }
 
   #app {
     @apply w-full;
