@@ -19,9 +19,11 @@ export default defineComponent({
     },
     modelValue: {
       type: String as PropType<string>,
+      default: '',
       required: false,
     },
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       selected: this.modelValue,
@@ -44,7 +46,6 @@ export default defineComponent({
   },
 });
 </script>
-
 
 <template>
   <select 

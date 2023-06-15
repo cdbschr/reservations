@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from "vue";
+  import { ref, computed, watch } from "vue";
   import Header from "../layouts/HeaderApp.vue";
   import Footer from "../layouts/FooterApp.vue";
   import TitlePage from "../components/TitlePage.vue";
@@ -77,6 +77,15 @@
     resetObject();
     location.reload();
   };
+
+  // à delete
+  watch(
+    reservation,
+    (newVal) => {
+      console.log("Object evolution :", newVal);
+    },
+    { deep: true }
+  );
 </script>
 
 <template>
@@ -152,11 +161,7 @@
           <div>
             <label for="room" class="mb-2">Salle</label>
           </div>
-          <Select
-            v-model="reservation.room"
-            name="salle"
-            :data="rooms"
-          />
+          <Select v-model="reservation.room" name="salle" :data="rooms" />
         </div>
 
         <div class="mb-5">
@@ -175,13 +180,13 @@
           />
         </div>
 
-        <div class="flex justify-around mb-3">
-          <Button type="submit" class="w-4/10">Réserver</Button>
+        <div class="flex justify-center mb-3">
+          <Button type="submit" class="w-4/10 mx-1">Réserver</Button>
           <Button
             type="button"
             text-color="text-red-400"
             border-class=""
-            class="w-4/10"
+            class="w-4/10 mx-1"
             @click="reset"
             >Annuler</Button
           >

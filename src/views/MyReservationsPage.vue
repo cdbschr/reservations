@@ -1,17 +1,15 @@
 <script setup lang="ts">
   import {
     ref,
-    onMounted,
     onBeforeUnmount,
-    computed,
-    watch,
-    nextTick,
+    computed
   } from "vue";
   import Header from "../layouts/HeaderApp.vue";
   import Footer from "../layouts/FooterApp.vue";
   import Title from "../components/TitlePage.vue";
   import InputDate from "../components/InputDate.vue";
   import RecapDate from "../components/RecapDate.vue";
+  import useInfiniteScroll from "../helpers/infiniteScroll";
 
   const reservations = ref([
     {
@@ -178,36 +176,6 @@
     });
   });
 
-  let observer: IntersectionObserver;
-
-  const count = ref(3);
-  const list = ref(sortedReservations.value.slice(0, count.value));
-  const loadMoreRef = ref(null);
-
-  watch(count, (newCount) => {
-    list.value = sortedReservations.value.slice(0, newCount);
-  });
-
-  onMounted(() => {
-    observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        count.value += 3;
-      }
-    });
-
-    nextTick(() => {
-      if (loadMoreRef.value) {
-        observer.observe(loadMoreRef.value);
-      }
-    });
-
-    window.addEventListener("scroll", handleScroll);
-  });
-
-  onBeforeUnmount(() => {
-    window.removeEventListener("scroll", handleScroll);
-  });
-
   const pastCounter = ref(2);
   const futureCounter = ref(2);
 
@@ -243,20 +211,17 @@
     return [...pastReservations.value, ...futureReservations.value];
   });
 
-  function handleScroll() {
-    const bottomOfWindow =
-      document.documentElement.scrollTop + window.innerHeight ===
-      document.documentElement.offsetHeight;
-    const topOfWindow = document.documentElement.scrollTop === 0;
+  // Use the useInfiniteScroll helper
+  let { handleScroll } = useInfiniteScroll({
+    list: displayedReservations,
+    counter: pastCounter,
+    loadMorePast,
+    loadMoreFuture,
+  });
 
-    if (bottomOfWindow) {
-      loadMoreFuture();
-    }
-
-    if (topOfWindow) {
-      loadMorePast();
-    }
-  }
+  onBeforeUnmount(() => {
+    window.removeEventListener("scroll", handleScroll);
+  });
 
   const sectionClass = computed(() => {
     if (pastReservations.value.length === todayIndex) {

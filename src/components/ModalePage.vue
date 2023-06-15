@@ -58,7 +58,7 @@ v-if="modelValue"
               />
             </svg>
           </button>
-          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left flex-grow flex items-center justify-center">
+          <div class="mt-5 mb-10 text-center sm:mt-0 sm:ml-4 sm:text-left flex-grow flex items-center justify-center">
             <slot></slot>
           </div>
         </div>
