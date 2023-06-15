@@ -1,23 +1,23 @@
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+  import { defineComponent, PropType } from "vue";
 
-export default defineComponent({
-  name: "TitlePage",
-  props: {
-    text: {
-      type: String as PropType<string>,
-      required: true,
+  export default defineComponent({
+    name: "TitlePage",
+    props: {
+      text: {
+        type: String as PropType<string>,
+        required: true,
+      },
     },
-  },
-  computed: {
-    underlinedText(): string {
-      return this.text.slice(0, -2);
+    computed: {
+      underlinedText(): string {
+        return this.text.slice(0, -2);
+      },
+      remainingText(): string {
+        return this.text.slice(-2);
+      },
     },
-    remainingText(): string {
-      return this.text.slice(-2);
-    },
-  },
-});
+  });
 </script>
 
 <template>

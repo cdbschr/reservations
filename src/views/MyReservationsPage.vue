@@ -1,9 +1,5 @@
 <script setup lang="ts">
-  import {
-    ref,
-    onBeforeUnmount,
-    computed
-  } from "vue";
+  import { ref, onBeforeUnmount, computed } from "vue";
   import Header from "../layouts/HeaderApp.vue";
   import Footer from "../layouts/FooterApp.vue";
   import Title from "../components/TitlePage.vue";

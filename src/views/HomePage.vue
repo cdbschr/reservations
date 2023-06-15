@@ -8,14 +8,14 @@
   const router = useRouter();
 
   const goToReservation = () => {
-    router.push('/reservation');
+    router.push("/reservation");
   };
 
   const goToMyReservations = () => {
-    router.push('/my-reservations');
+    router.push("/my-reservations");
   };
   const goToFreePlaces = () => {
-    router.push('/free-places');
+    router.push("/free-places");
   };
 </script>
 
