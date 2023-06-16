@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { defineComponent, PropType } from "vue";
+  import { defineComponent, PropType, computed } from "vue";
 
   export default defineComponent({
     name: "RecapDate",
@@ -16,6 +16,16 @@
         }>,
         required: true,
       },
+      today: {
+        type: String as PropType<string>,
+        required: true,
+      },
+    },
+    setup(props) {
+      const isToday = computed(
+        () => props.reservation.date_start === props.today
+      );
+      return { isToday };
     },
     computed: {
       displayDate(): string {
@@ -58,10 +68,15 @@
 <template>
   <h2 class="text-lg font-bold mt-2 px-4">{{ displayDate }}</h2>
   <div class="w-full sm:w-1/3 p-2">
-    <div class="bg-white rounded-lg p-4 shadow-md">
-      <div class="flex justify-around text-gray-600">
-        <p class="text-base">{{ reservation.areaName }}</p>
-        <p class="font-black text-xl">{{ reservation.placeNumber }}</p>
+    <div @click="$emit('open-modal')">
+      <div
+        class="bg-white rounded-lg p-4 shadow-md"
+        :class="{ 'bg-gray-200': isToday }"
+      >
+        <div class="flex justify-around items-center text-gray-600">
+          <p class="text-base">{{ reservation.areaName }}</p>
+          <p class="font-black text-xl">{{ reservation.placeNumber }}</p>
+        </div>
       </div>
     </div>
   </div>

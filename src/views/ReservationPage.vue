@@ -118,10 +118,10 @@
 
         <div class="mb-5">
           <label for="duration" class="mb-2">Durée</label>
-          <div class="flex justify-around">
+          <div class="flex justify-between">
             <Button
               v-if="!isDatesDifferent"
-              class="w-2/5"
+              class="w-full mx-1"
               :class="{ 'bg-lime-300': reservation.duration === 'journee' }"
               @click.prevent="setDuration('journee')"
               >Journée</Button
@@ -135,7 +135,7 @@
             >
             <Button
               v-if="!isDatesDifferent"
-              class="w-2/5"
+              class="w-full mx-1"
               @click.prevent="toggleExtraOptions"
               >{{ showExtraOptions ? "↓" : "Préciser" }}</Button
             >
@@ -143,13 +143,13 @@
 
           <div v-if="showExtraOptions" class="flex justify-around mt-[-15px]">
             <Button
-              class="w-2/5"
+              class="w-full mx-1"
               :class="{ 'bg-lime-300': reservation.duration === 'matin' }"
               @click.prevent="setDuration('matin')"
               >Matinée</Button
             >
             <Button
-              class="w-2/5"
+              class="w-full mx-1"
               :class="{ 'bg-lime-300': reservation.duration === 'am' }"
               @click.prevent="setDuration('am')"
               >Après-Midi</Button

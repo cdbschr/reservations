@@ -1,13 +1,30 @@
 <script setup lang="ts">
-  import { ref, onBeforeUnmount, computed } from "vue";
+  import { ref, computed } from "vue";
   import Header from "../layouts/HeaderApp.vue";
   import Footer from "../layouts/FooterApp.vue";
   import Title from "../components/TitlePage.vue";
   import InputDate from "../components/InputDate.vue";
   import RecapDate from "../components/RecapDate.vue";
-  import useInfiniteScroll from "../helpers/infiniteScroll";
+  import {
+    expandAndSortReservations,
+    generateDateRange,
+  } from "../helpers/displayMyReservations.ts";
+  import Modale from "../components/ModalePage.vue";
+  import Button from "../components/Button.vue";
 
-  const reservations = ref([
+  type Reservation = {
+    id: number;
+    id_user: string;
+    placeNumber: number;
+    date_start: string;
+    date_end: string;
+    created_at: string;
+    areaName: string;
+    date_range?: string[];
+  };
+
+  const today = new Date().toISOString().split("T")[0];
+  const reservationsData: Reservation[] = [
     {
       id: 1,
       id_user: "user1",
@@ -84,8 +101,8 @@
       id: 9,
       id_user: "user9",
       placeNumber: 1,
-      date_start: "2023-06-31",
-      date_end: "2023-06-01",
+      date_start: "2023-07-01",
+      date_end: "2023-07-02",
       created_at: "2023-05-26",
       areaName: "Area 9",
     },
@@ -93,8 +110,8 @@
       id: 10,
       id_user: "user10",
       placeNumber: 2,
-      date_start: "2023-06-15",
-      date_end: "2023-06-10",
+      date_start: "2023-06-14",
+      date_end: "2023-06-14",
       created_at: "2023-06-05",
       areaName: "Area 10",
     },
@@ -129,8 +146,8 @@
       id: 14,
       id_user: "user14",
       placeNumber: 1,
-      date_start: "2023-06-18",
-      date_end: "2023-06-12",
+      date_start: "2023-06-14",
+      date_end: "2023-06-14",
       created_at: "2023-06-07",
       areaName: "Area 14",
     },
@@ -148,7 +165,7 @@
       id_user: "user16",
       placeNumber: 3,
       date_start: "2023-06-13",
-      date_end: "2023-06-14",
+      date_end: "2023-06-15",
       created_at: "2023-06-09",
       areaName: "Area 16",
     },
@@ -156,95 +173,74 @@
       id: 17,
       id_user: "user17",
       placeNumber: 1,
-      date_start: "2023-06-14",
-      date_end: "2023-06-15",
+      date_start: "2023-06-16",
+      date_end: "2023-06-17",
       created_at: "2023-06-10",
       areaName: "Area 17",
     },
-  ]);
+  ];
 
-  const sortedReservations = computed(() => {
-    return [...reservations.value].sort((a, b) => {
-      const dateA = new Date(a.date_start);
-      const dateB = new Date(b.date_start);
-
-      return dateA.getTime() - dateB.getTime();
-    });
+  const reservationsRef = ref(reservationsData);
+  reservationsRef.value.forEach((reservation: Reservation) => {
+    reservation.date_range = generateDateRange(
+      reservation.date_start,
+      reservation.date_end
+    );
   });
 
-  const pastCounter = ref(2);
-  const futureCounter = ref(2);
+  const selectedDate = ref<string | null>(null);
 
-  const todayIndex = sortedReservations.value.findIndex(
-    (reservation) => new Date(reservation.date_start) >= new Date()
+  const displayedReservations = computed(() =>
+    expandAndSortReservations(
+      [...reservationsRef.value],
+      selectedDate.value ? new Date(selectedDate.value) : new Date(),
+      true,
+      !!selectedDate.value
+    )
   );
 
-  const loadMorePast = () => {
-    pastCounter.value = Math.min(pastCounter.value + 3, todayIndex);
+  const updateSelectedDate = (event: InputEvent) => {
+    selectedDate.value = (event.target as HTMLInputElement).value;
   };
 
-  const loadMoreFuture = () => {
-    futureCounter.value = Math.min(
-      futureCounter.value + 3,
-      sortedReservations.value.length - todayIndex
-    );
-  };
-
-  const pastReservations = computed(() => {
-    return sortedReservations.value
-      .slice(0, todayIndex)
-      .slice(-pastCounter.value);
-  });
-
-  const futureReservations = computed(() => {
-    return sortedReservations.value.slice(
-      todayIndex,
-      todayIndex + futureCounter.value
-    );
-  });
-
-  const displayedReservations = computed(() => {
-    return [...pastReservations.value, ...futureReservations.value];
-  });
-
-  // Use the useInfiniteScroll helper
-  let { handleScroll } = useInfiniteScroll({
-    list: displayedReservations,
-    counter: pastCounter,
-    loadMorePast,
-    loadMoreFuture,
-  });
-
-  onBeforeUnmount(() => {
-    window.removeEventListener("scroll", handleScroll);
-  });
-
-  const sectionClass = computed(() => {
-    if (pastReservations.value.length === todayIndex) {
-      return "";
-    } else {
-      return "mt-[-5rem]";
-    }
-  });
+  const showModal = ref(false);
+  const handleModal = () => (showModal.value = true);
 </script>
 
 <template>
-  <Header />
-  <main>
-    <Title text="Mes Réservations" />
-    <div class="sticky top-0 bg-white z-10 p-4">
-      <div class="flex items-center justify-around">
-        <label for="" class="w-[45%]">Choisir une date</label>
-        <InputDate name="date" class="w-[45%]" />
+  <section class="flex flex-col min-h-screen">
+    <Header />
+    <main>
+      <Title text="Mes Réservations" />
+      <div class="sticky top-0 bg-white z-10 p-4">
+        <div class="flex items-center justify-around">
+          <label for="" class="w-[45%]">Choisir une date</label>
+          <InputDate name="date" class="w-[45%]" @input="updateSelectedDate" />
+        </div>
       </div>
-    </div>
-    <section :class="sectionClass">
-      <RecapDate
-        v-for="reservation in displayedReservations"
-        :key="reservation.id"
-        :reservation="reservation"
-      />
-    </section>
-  </main>
-  <Footer />
+      <section class="flex flex-wrap">
+        <template v-if="displayedReservations.length">
+          <RecapDate
+            v-for="reservation in displayedReservations"
+            :key="reservation.id + reservation.date_start"
+            :reservation="reservation"
+            :today="today"
+            @open-modal="handleModal"
+          />
+        </template>
+        <template v-else>
+          <p class="mx-auto my-4">
+            Aucune réservation n'a été trouvée pour la date sélectionnée.
+          </p>
+        </template>
+      </section>
+    </main>
+    <Footer />
+    <Modale v-model="showModal">
+      <div class="flex">
+        <Button width="3/4 sm:w-1/2" class="mx-2">Modifier</Button>
+        <Button width="3/4 sm:w-1/2" border-class="border-2 border-red-400" class="mx-2">Supprimer</Button>
+      </div>
+    </Modale>
+  </section>
 </template>

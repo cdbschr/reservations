@@ -17,23 +17,27 @@
 </script>
 
 <template>
-  <Header />
-  <main>
-    <Title text="Places du jour" />
-    <div v-for="roomData in placesData" :key="roomData.roomName">
-      <h2 class="font-medium text-2xl mb-4">{{ roomData.roomName }}</h2>
-      <div class="flex flex-wrap justify-center w-full">
-        <RecapPlace
-          v-for="n in 3"
-          :key="n"
-          :place-data="roomData"
-          @open-modal="handleModal"
-        />
+  <section class="flex flex-col min-h-screen">
+    <Header />
+    <main>
+      <Title text="Places du jour" />
+      <div v-for="roomData in placesData" :key="roomData.roomName">
+        <h2 class="font-medium text-2xl mb-4">{{ roomData.roomName }}</h2>
+        <div class="flex flex-wrap justify-center w-full">
+          <RecapPlace
+            v-for="n in 3"
+            :key="n"
+            :place-data="roomData"
+            @open-modal="handleModal"
+          />
+        </div>
       </div>
-    </div>
-    <ModalePage v-model="showModal">
-      <button class="px-4 py-2 bg-lime-300 text-white rounded">Réserver</button>
-    </ModalePage>
-  </main>
-  <Footer />
+      <ModalePage v-model="showModal">
+        <button class="px-4 py-2 bg-lime-300 text-white rounded">
+          Réserver
+        </button>
+      </ModalePage>
+    </main>
+    <Footer />
+  </section>
 </template>
