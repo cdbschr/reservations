@@ -21,6 +21,7 @@
         required: true,
       },
     },
+    emits: ["open-modal"],
     setup(props) {
       const isToday = computed(
         () => props.reservation.date_start === props.today

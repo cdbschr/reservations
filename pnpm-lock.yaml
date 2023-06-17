@@ -11,9 +11,6 @@ dependencies:
   axios:
     specifier: ^1.4.0
     version: 1.4.0
-  dotenv:
-    specifier: ^16.1.4
-    version: 16.1.4
   vue:
     specifier: ^3.2.47
     version: 3.2.47
@@ -1943,11 +1940,6 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
-
-  /dotenv@16.1.4:
-    resolution: {integrity: sha512-m55RtE8AsPeJBpOIFKihEmqUcoVncQIwo7x9U8ZwLEZw9ZpXboz2c+rvog+jUaJvVrZ5kBOeYQBX5+8Aa/OZQw==}
-    engines: {node: '>=12'}
-    dev: false
 
   /electron-to-chromium@1.4.421:
     resolution: {integrity: sha512-wZOyn3s/aQOtLGAwXMZfteQPN68kgls2wDAnYOA8kCjBvKVrW5RwmWVspxJYTqrcN7Y263XJVsC66VCIGzDO3g==}

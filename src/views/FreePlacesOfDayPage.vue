@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Header from "../layouts/HeaderApp.vue";
-  import Footer from "../layouts/FooterApp.vue";
-  import Title from "../components/TitlePage.vue";
-  import RecapPlace from "../components/RecapPlace.vue";
-  import ModalePage from "../components/ModalePage.vue";
+  import Header from "~/layouts/HeaderApp.vue";
+  import Footer from "~/layouts/FooterApp.vue";
+  import Title from "~/components/TitlePage.vue";
+  import RecapPlace from "~/components/RecapPlace.vue";
+  import ModalePage from "~/components/ModalePage.vue";
   import { ref } from "vue";
 
   const placesData = Array.from({ length: 10 }, (_, i) => ({

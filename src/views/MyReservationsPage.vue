@@ -1,16 +1,16 @@
 <script setup lang="ts">
   import { ref, computed } from "vue";
-  import Header from "../layouts/HeaderApp.vue";
-  import Footer from "../layouts/FooterApp.vue";
-  import Title from "../components/TitlePage.vue";
-  import InputDate from "../components/InputDate.vue";
-  import RecapDate from "../components/RecapDate.vue";
+  import Header from "~/layouts/HeaderApp.vue";
+  import Footer from "~/layouts/FooterApp.vue";
+  import Title from "~/components/TitlePage.vue";
+  import InputDate from "~/components/InputDate.vue";
+  import RecapDate from "~/components/RecapDate.vue";
   import {
     expandAndSortReservations,
     generateDateRange,
-  } from "../helpers/displayMyReservations.ts";
-  import Modale from "../components/ModalePage.vue";
-  import Button from "../components/Button.vue";
+  } from "~/helpers/displayMyReservations.ts";
+  import Modale from "~/components/ModalePage.vue";
+  import Button from "~/components/Button.vue";
 
   type Reservation = {
     id: number;
@@ -239,7 +239,12 @@
     <Modale v-model="showModal">
       <div class="flex">
         <Button width="3/4 sm:w-1/2" class="mx-2">Modifier</Button>
-        <Button width="3/4 sm:w-1/2" border-class="border-2 border-red-400" class="mx-2">Supprimer</Button>
+        <Button
+          width="3/4 sm:w-1/2"
+          border-class="border-2 border-red-400"
+          class="mx-2"
+          >Supprimer</Button
+        >
       </div>
     </Modale>
   </section>

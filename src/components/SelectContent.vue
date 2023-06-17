@@ -1,11 +1,6 @@
 <script lang="ts">
   import { defineComponent, PropType } from "vue";
 
-  interface SelectOption {
-    value: string;
-    text: string;
-  }
-
   export default defineComponent({
     name: "SelectContent",
     props: {
@@ -14,7 +9,7 @@
         required: true,
       },
       data: {
-        type: Array as PropType<SelectOption[]>,
+        type: Array as PropType<any[] | null>,
         required: true,
       },
       modelValue: {

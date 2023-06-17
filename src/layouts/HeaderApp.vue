@@ -1,6 +1,6 @@
 <script lang="ts">
   import { defineComponent } from "vue";
-  import AccountAccess from "../components/AccountAccess.vue";
+  import AccountAccess from "~/components/AccountAccess.vue";
 
   export default defineComponent({
     name: "HeaderApp",

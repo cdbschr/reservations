@@ -15,6 +15,7 @@
         required: true,
       },
     },
+    emits: ["open-modal"],
     computed: {
       areaName(): string {
         return this.placeData.areaName;

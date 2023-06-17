@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  import { ref, computed, watch } from "vue";
-  import Header from "../layouts/HeaderApp.vue";
-  import Footer from "../layouts/FooterApp.vue";
-  import TitlePage from "../components/TitlePage.vue";
-  import Button from "../components/Button.vue";
-  import InputDate from "../components/InputDate.vue";
-  import Select from "../components/SelectContent.vue";
+  import { ref, computed, watch, onMounted } from "vue";
+  import Header from "~/layouts/HeaderApp.vue";
+  import Footer from "~/layouts/FooterApp.vue";
+  import TitlePage from "~/components/TitlePage.vue";
+  import Button from "~/components/Button.vue";
+  import InputDate from "~/components/InputDate.vue";
+  import Select from "~/components/SelectContent.vue";
+  import { getLocationsByRoom, getRooms } from "~/repositories/reservations";
 
   let showExtraOptions = ref(false);
 
@@ -26,18 +27,20 @@
     );
   });
 
-  //TODO: Ensuite enlever les valeurs par les références de supabase par la suite
-  let rooms = ref([
-    { value: "1", text: "Salle 1" },
-    { value: "2", text: "Salle 2" },
-    // Ajoutez ici vos autres salles
-  ]);
+  let rooms = ref<any[] | null>(null);
+  let locations = ref<any[] | null>(null);
 
-  let locations = ref([
-    { value: "1", text: "Place 1" },
-    { value: "2", text: "Place 2" },
-    // Ajoutez ici vos autres places
-  ]);
+  onMounted(async () => {
+    const roomsData = await getRooms();
+    if (roomsData) {
+      rooms.value = roomsData.map((room) => ({
+        value: room.id,
+        text: room.name,
+      }));
+    } else {
+      rooms.value = null;
+    }
+  });
 
   let updateDate1 = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
@@ -78,7 +81,29 @@
     location.reload();
   };
 
-  // à delete
+  watch(
+    () => [
+      reservation.value.room,
+      reservation.value.date1,
+      reservation.value.date2,
+    ],
+    async ([room, date1, date2]) => {
+      if (room && date1 && date2) {
+        const locationsData = await getLocationsByRoom(room, date1, date2);
+        if (locationsData) {
+          locations.value = locationsData.map((location) => ({
+            value: location.place_number,
+            text: location.place_number.toString(),
+          }));
+        } else {
+          locations.value = null;
+        }
+      }
+    },
+    { deep: true }
+  );
+
+  // à delete par la suite
   watch(
     reservation,
     (newVal) => {

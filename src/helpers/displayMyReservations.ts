@@ -14,11 +14,18 @@ export const generateDateRange = (start: string, end: string) => {
   const end_date = new Date(end);
   const date_range = [];
 
-  while (start_date <= end_date) {
-    date_range.push(new Date(start_date).toISOString().split("T")[0]);
-    start_date.setDate(start_date.getDate() + 1);
-  }
+  console.log('in generateDateRange start',start_date);
+  console.log('in generateDateRange end',end_date);
+  
 
+  while (start_date <= end_date) {
+     const formattedDate = new Date(start_date).toISOString().split("T")[0];
+     const formattedTime = new Date(start_date).toISOString().split("T")[1].split('Z')[0];
+
+     date_range.push(`${formattedDate}T${formattedTime}+02`);
+     start_date.setDate(start_date.getDate() + 1);
+  }
+  console.log(date_range);
   return date_range;
 };
 
@@ -36,6 +43,8 @@ export const expandAndSortReservations = (
       reservation.date_end
     );
 
+    console.log('in expandandsortReservation : ',date_range);
+
     date_range.forEach((date) => {
       const newReservation = { ...reservation, date_start: date };
       expandedReservations.push(newReservation);
@@ -48,7 +57,6 @@ export const expandAndSortReservations = (
     filteredReservations = expandedReservations.filter((reservation) =>
       new Date(reservation.date_start).toISOString().split("T")[0] === filterDate?.toISOString().split("T")[0]
     );
-    console.log("if", filteredReservations);
   } else {
     filteredReservations = expandedReservations.filter((reservation) => {
       const date = new Date(reservation.date_start);
