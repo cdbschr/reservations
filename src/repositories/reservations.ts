@@ -152,7 +152,7 @@ export function transformReservationObj(
 
   switch (reservationObj.duration) {
     case "journee":
-      if (new Date(reservationObj.date1) >= new Date(reservationObj.date2)) {
+      if (new Date(reservationObj.date1) <= new Date(reservationObj.date2)) {
         newReservationObj.date_start = `${reservationObj.date1}T08:00:00Z`;
         newReservationObj.date_end = `${reservationObj.date2}T19:00:00Z`;
       } else {

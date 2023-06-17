@@ -6,7 +6,7 @@
   import Button from "~/components/Button.vue";
   import InputDate from "~/components/InputDate.vue";
   import Select from "~/components/SelectContent.vue";
-  import { getLocationsByRoom, getRooms } from "~/repositories/reservations";
+  import { createReservation, getLocationsByRoom, getRooms } from "~/repositories/reservations";
 
   let showExtraOptions = ref(false);
 
@@ -102,6 +102,16 @@
     },
     { deep: true }
   );
+
+  async function submitForm() {
+  try {
+    const reservationResult = await createReservation(reservation.value);
+    console.log("Réservation réussie !", reservationResult);
+    reset();
+  } catch (error) {
+    console.error("Une erreur est survenue lors de la réservation :", error);
+  }
+}
 
   // à delete par la suite
   watch(
@@ -206,7 +216,7 @@
         </div>
 
         <div class="flex justify-center mb-3">
-          <Button type="submit" class="w-4/10 mx-1">Réserver</Button>
+          <Button type="submit" class="w-4/10 mx-1" @click.prevent="submitForm">Réserver</Button>
           <Button
             type="button"
             text-color="text-red-400"
