@@ -1,5 +1,6 @@
 <script lang="ts">
   import { defineComponent } from "vue";
+import { Reservation } from "~/types/reservation";
 
   export default defineComponent({
     name: "ModalePage",
@@ -7,6 +8,10 @@
       modelValue: {
         type: Boolean,
         default: false,
+      },
+      reservation: {
+        type: Object as () => Reservation | null,
+        default: null,
       },
     },
     emits: ["update:modelValue"],

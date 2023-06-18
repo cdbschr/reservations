@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { defineComponent, PropType, computed } from "vue";
+  import { defineComponent, PropType, computed, SetupContext } from "vue";
 
   export default defineComponent({
     name: "RecapDate",
@@ -21,12 +21,18 @@
         required: true,
       },
     },
-    emits: ["open-modal"],
-    setup(props) {
+    emits: ["open-modal", "selected"],
+    setup(props, context: SetupContext) {
       const isToday = computed(
         () => props.reservation.date_start === props.today
       );
-      return { isToday };
+      const selectAndOpenModal = () => {
+        if (props.reservation) {
+          context.emit("selected", props.reservation);
+          context.emit("open-modal");
+        }
+      };
+      return { isToday, selectAndOpenModal };
     },
     computed: {
       displayDate(): string {
@@ -67,16 +73,18 @@
 </script>
 
 <template>
-  <h2 class="text-lg font-bold mt-2 px-4">{{ displayDate }}</h2>
-  <div class="w-full sm:w-1/3 p-2">
-    <div @click="$emit('open-modal')">
-      <div
-        class="bg-white rounded-lg p-4 shadow-md"
-        :class="{ 'bg-gray-200': isToday }"
-      >
-        <div class="flex justify-around items-center text-gray-600">
-          <p class="text-base">{{ reservation.areaName }}</p>
-          <p class="font-black text-xl">{{ reservation.placeNumber }}</p>
+  <div class="w-full flex flex-col items-center">
+    <h2 class="text-lg font-bold mt-2 px-4">{{ displayDate }}</h2>
+    <div class="w-full sm:w-1/3 p-2">
+      <div @click="selectAndOpenModal">
+        <div
+          class="bg-white rounded-lg p-4 shadow-md"
+          :class="{ 'bg-gray-200': isToday }"
+        >
+          <div class="flex justify-around items-center text-gray-600">
+            <p class="text-base">{{ reservation.areaName }}</p>
+            <p class="font-black text-xl">{{ reservation.placeNumber }}</p>
+          </div>
         </div>
       </div>
     </div>

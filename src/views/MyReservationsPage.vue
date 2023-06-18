@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from "vue";
+  import { ref, computed, onMounted } from "vue";
   import Header from "~/layouts/HeaderApp.vue";
   import Footer from "~/layouts/FooterApp.vue";
   import Title from "~/components/TitlePage.vue";
@@ -11,176 +11,15 @@
   } from "~/helpers/displayMyReservations.ts";
   import Modale from "~/components/ModalePage.vue";
   import Button from "~/components/Button.vue";
-
-  type Reservation = {
-    id: number;
-    id_user: string;
-    placeNumber: number;
-    date_start: string;
-    date_end: string;
-    created_at: string;
-    areaName: string;
-    date_range?: string[];
-  };
+  import { Reservation } from "~/types/reservation";
+  import {
+    deleteReservation,
+    getReservationsByUser,
+  } from "~/repositories/showReservations";
 
   const today = new Date().toISOString().split("T")[0];
-  const reservationsData: Reservation[] = [
-    {
-      id: 1,
-      id_user: "user1",
-      placeNumber: 1,
-      date_start: "2023-06-04",
-      date_end: "2023-06-05",
-      created_at: "2023-06-01",
-      areaName: "Area 1",
-    },
-    {
-      id: 2,
-      id_user: "user2",
-      placeNumber: 2,
-      date_start: "2023-06-05",
-      date_end: "2023-06-06",
-      created_at: "2023-06-01",
-      areaName: "Area 2",
-    },
-    {
-      id: 3,
-      id_user: "user3",
-      placeNumber: 2,
-      date_start: "2023-06-02",
-      date_end: "2023-06-03",
-      created_at: "2023-05-29",
-      areaName: "Area 3",
-    },
-    {
-      id: 4,
-      id_user: "user4",
-      placeNumber: 1,
-      date_start: "2023-06-06",
-      date_end: "2023-06-07",
-      created_at: "2023-06-02",
-      areaName: "Area 4",
-    },
-    {
-      id: 5,
-      id_user: "user5",
-      placeNumber: 3,
-      date_start: "2023-05-29",
-      date_end: "2023-05-30",
-      created_at: "2023-05-24",
-      areaName: "Area 5",
-    },
-    {
-      id: 6,
-      id_user: "user6",
-      placeNumber: 2,
-      date_start: "2023-06-07",
-      date_end: "2023-06-08",
-      created_at: "2023-06-03",
-      areaName: "Area 6",
-    },
-    {
-      id: 7,
-      id_user: "user7",
-      placeNumber: 1,
-      date_start: "2023-05-30",
-      date_end: "2023-05-31",
-      created_at: "2023-05-25",
-      areaName: "Area 7",
-    },
-    {
-      id: 8,
-      id_user: "user8",
-      placeNumber: 3,
-      date_start: "2023-06-08",
-      date_end: "2023-06-09",
-      created_at: "2023-06-04",
-      areaName: "Area 8",
-    },
-    {
-      id: 9,
-      id_user: "user9",
-      placeNumber: 1,
-      date_start: "2023-07-01",
-      date_end: "2023-07-02",
-      created_at: "2023-05-26",
-      areaName: "Area 9",
-    },
-    {
-      id: 10,
-      id_user: "user10",
-      placeNumber: 2,
-      date_start: "2023-06-14",
-      date_end: "2023-06-14",
-      created_at: "2023-06-05",
-      areaName: "Area 10",
-    },
-    {
-      id: 11,
-      id_user: "user11",
-      placeNumber: 1,
-      date_start: "2023-06-01",
-      date_end: "2023-06-02",
-      created_at: "2023-05-27",
-      areaName: "Area 11",
-    },
-    {
-      id: 12,
-      id_user: "user12",
-      placeNumber: 2,
-      date_start: "2023-06-10",
-      date_end: "2023-06-11",
-      created_at: "2023-06-06",
-      areaName: "Area 12",
-    },
-    {
-      id: 13,
-      id_user: "user13",
-      placeNumber: 3,
-      date_start: "2023-06-30",
-      date_end: "2023-06-04",
-      created_at: "2023-05-29",
-      areaName: "Area 13",
-    },
-    {
-      id: 14,
-      id_user: "user14",
-      placeNumber: 1,
-      date_start: "2023-06-14",
-      date_end: "2023-06-14",
-      created_at: "2023-06-07",
-      areaName: "Area 14",
-    },
-    {
-      id: 15,
-      id_user: "user15",
-      placeNumber: 2,
-      date_start: "2023-06-12",
-      date_end: "2023-06-13",
-      created_at: "2023-06-08",
-      areaName: "Area 15",
-    },
-    {
-      id: 16,
-      id_user: "user16",
-      placeNumber: 3,
-      date_start: "2023-06-13",
-      date_end: "2023-06-15",
-      created_at: "2023-06-09",
-      areaName: "Area 16",
-    },
-    {
-      id: 17,
-      id_user: "user17",
-      placeNumber: 1,
-      date_start: "2023-06-16",
-      date_end: "2023-06-17",
-      created_at: "2023-06-10",
-      areaName: "Area 17",
-    },
-  ];
 
-  const reservationsRef = ref(reservationsData);
+  const reservationsRef = ref<Reservation[]>([]);
   reservationsRef.value.forEach((reservation: Reservation) => {
     reservation.date_range = generateDateRange(
       reservation.date_start,
@@ -203,8 +42,83 @@
     selectedDate.value = (event.target as HTMLInputElement).value;
   };
 
+  const selectedReservation = ref<Reservation | null>(null);
   const showModal = ref(false);
-  const handleModal = () => (showModal.value = true);
+  const handleModal = () => {
+    showModal.value = true;
+    console.log(selectedReservation);
+  };
+
+  const setSelectedReservation = (reservation: Reservation) => {
+    selectedReservation.value = reservation;
+  };
+
+  onMounted(async () => {
+    reservationsRef.value = await getReservationsByUser();
+    reservationsRef.value.forEach((reservation: Reservation) => {
+      reservation.date_range = generateDateRange(
+        reservation.date_start,
+        reservation.date_end
+      );
+    });
+  });
+
+  const handleDeleteReservation = async () => {
+    if (!selectedReservation.value) {
+      console.error("No reservation selected");
+      return;
+    }
+
+    try {
+      if (selectedReservation.value?.id) {
+        const isDeleted = await deleteReservation(
+          selectedReservation.value.id.toString()
+        );
+        if (isDeleted) {
+          selectedReservation.value = null;
+          reservationsRef.value = await getReservationsByUser();
+
+          reservationsRef.value.forEach((reservation: Reservation) => {
+            reservation.date_range = generateDateRange(
+              reservation.date_start,
+              reservation.date_end
+            );
+          });
+          showModal.value = false;
+        }
+      } else {
+        console.error("No reservation selected");
+      }
+    } catch (error) {
+      console.error("Failed to delete reservation", error);
+    }
+  };
+
+  const formatDate = (isStartDate = false): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    };
+
+    if (selectedReservation.value) {
+      let dateObj;
+
+      if (
+        isStartDate &&
+        selectedReservation.value.date_range &&
+        selectedReservation.value.date_range.length > 0
+      ) {
+        dateObj = new Date(selectedReservation.value.date_range[0]);
+      } else {
+        dateObj = new Date(selectedReservation.value.date_end);
+      }
+
+      return dateObj.toLocaleDateString("fr-FR", options);
+    }
+
+    return "";
+  };
 </script>
 
 <template>
@@ -226,6 +140,7 @@
             :reservation="reservation"
             :today="today"
             @open-modal="handleModal"
+            @selected="setSelectedReservation"
           />
         </template>
         <template v-else>
@@ -236,15 +151,24 @@
       </section>
     </main>
     <Footer />
-    <Modale v-model="showModal">
-      <div class="flex">
-        <Button width="3/4 sm:w-1/2" class="mx-2">Modifier</Button>
-        <Button
-          width="3/4 sm:w-1/2"
-          border-class="border-2 border-red-400"
-          class="mx-2"
-          >Supprimer</Button
-        >
+    <Modale v-model="showModal" :reservation="selectedReservation">
+      <div class="flex flex-col space-y-2">
+        <p class="font-bold">Référence réservation:</p>
+        <p>{{ selectedReservation?.id }}</p>
+        <p class="font-bold">Date de début:</p>
+        <p>{{ formatDate(true) }}</p>
+        <p class="font-bold">Date de fin:</p>
+        <p>{{ formatDate() }}</p>
+        <div class="flex pt-5">
+          <Button width="3/4 sm:w-1/2" class="mx-2">Modifier</Button>
+          <Button
+            width="3/4 sm:w-1/2"
+            border-class="border-2 border-red-400"
+            class="mx-2"
+            @click="handleDeleteReservation"
+            >Supprimer</Button
+          >
+        </div>
       </div>
     </Modale>
   </section>

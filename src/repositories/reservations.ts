@@ -23,8 +23,6 @@ const {
 export async function getRooms() {
   const { data: room, error } = await supabase.from("Room").select("id, name");
 
-  console.log("room", room);
-
   if (error) {
     console.error("Erreur lors de la récupération des salles :", error);
     return null;
@@ -55,7 +53,6 @@ export async function getLocationsByRoom(
     new Date(dateStart),
     new Date(dateEnd)
   );
-  console.log("reservations", reservations);
 
   if (!reservations) {
     console.error(
@@ -122,15 +119,6 @@ export async function getReservations(startDate: Date, endDate: Date) {
         new Date(reservation.date_end) >= new Date(startDateISO)
     );
 
-    overlappingReservations.forEach((reservation) => {
-      console.log("Date de début de la réservation :", reservation.date_start);
-      console.log("Date de fin de la réservation :", reservation.date_end);
-    });
-
-    console.log(
-      "Réservations récupérées avec succès !",
-      overlappingReservations
-    );
     return overlappingReservations;
   } catch (error) {
     console.error(
