@@ -6,5 +6,6 @@ export type Reservation = {
   date_end: string;
   created_at: string;
   areaName: string;
+  roomName?: string;
   date_range?: string[];
 };

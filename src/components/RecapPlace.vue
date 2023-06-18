@@ -2,10 +2,21 @@
   import { defineComponent, PropType } from "vue";
 
   interface PlaceData {
-    areaName: string;
-    placeNumber: number;
-    roomName: string;
-  }
+  id: number;
+  name: string;
+  placeNumber: number;
+  areaName: string;
+  roomName: string;
+  buildingName: string;
+  Room: {
+    id: number;
+    name: string;
+    Building: {
+      id: number;
+      name: string;
+    };
+  };
+}
 
   export default defineComponent({
     name: "RecapPlace",
@@ -24,7 +35,7 @@
         return this.placeData.placeNumber;
       },
       roomName(): string {
-        return this.placeData.roomName;
+        return this.placeData.Room.name;
       },
     },
   });
@@ -32,8 +43,8 @@
 
 <template>
   <div @click="$emit('open-modal')">
-    <div class="border-2 rounded-lg mt-1 mb-3 mx-3 py-2 px-2 w-4/10">
-      <div class="font-medium text-xl text-center">{{ areaName }}</div>
+    <div class="flex flex-wrap items-center justify-center border-2 rounded-lg mt-1 mb-3 mx-3 py-2 px-2 w-4/10 max-w-[85px] min-h-[130px]">
+      <div class="font-medium text-xl text-center w-full">{{ areaName }}</div>
       <div class="font-black text-center text-3xl mt-2">{{ placeNumber }}</div>
     </div>
   </div>

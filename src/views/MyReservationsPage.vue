@@ -16,10 +16,16 @@
     deleteReservation,
     getReservationsByUser,
   } from "~/repositories/showReservations";
+  import { useReservationStore } from "~/store/reservation";
+  // import { useRouter } from "vue-router";
+
+  const store = useReservationStore();
+  // const router = useRouter();
 
   const today = new Date().toISOString().split("T")[0];
 
   const reservationsRef = ref<Reservation[]>([]);
+
   reservationsRef.value.forEach((reservation: Reservation) => {
     reservation.date_range = generateDateRange(
       reservation.date_start,
@@ -53,6 +59,8 @@
     selectedReservation.value = reservation;
   };
 
+  store.setReservations(reservationsRef.value);
+
   onMounted(async () => {
     reservationsRef.value = await getReservationsByUser();
     reservationsRef.value.forEach((reservation: Reservation) => {
@@ -64,9 +72,9 @@
   });
 
   const handleDeleteReservation = async () => {
-    if (!selectedReservation.value) {
-      console.error("No reservation selected");
-      return;
+    if (store.selectedReservation && store.selectedReservation.id) {
+      store.deleteReservation(store.selectedReservation.id.toString());
+      showModal.value = false;
     }
 
     try {
@@ -93,6 +101,13 @@
       console.error("Failed to delete reservation", error);
     }
   };
+
+  // const handleEditReservation = () => {
+  //   if (store.selectedReservation) {
+  //     store.setSelectedReservation(store.selectedReservation);
+  //     router.push("/Reservation");
+  //   }
+  // };
 
   const formatDate = (isStartDate = false): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -159,8 +174,8 @@
         <p>{{ formatDate(true) }}</p>
         <p class="font-bold">Date de fin:</p>
         <p>{{ formatDate() }}</p>
-        <div class="flex pt-5">
-          <Button width="3/4 sm:w-1/2" class="mx-2">Modifier</Button>
+        <div class="flex justify-center pt-5">
+          <!-- <Button width="3/4 sm:w-1/2" class="mx-2" @click="handleEditReservation">Modifier</Button> -->
           <Button
             width="3/4 sm:w-1/2"
             border-class="border-2 border-red-400"

@@ -46,6 +46,24 @@ export async function getReservationsByUser(): Promise<Reservation[]> {
   return reservationsData as Reservation[];
 }
 
+export async function updateReservation(reservationId: string, updateData: Partial<Reservation>): Promise<boolean> {
+  const { error } = await supabase
+    .from("Reservation")
+    .update({
+      id_user: updateData.id_user,
+      place_number: updateData.placeNumber,
+      date_start: updateData.date_start,
+      date_end: updateData.date_end
+    })
+    .match({ id: reservationId });
+
+  if (error) {
+    console.error("Erreur lors de la mise à jour de la réservation :", error);
+    return false;
+  }
+
+  return true;
+}
 
 export async function deleteReservation(
   reservationId: string

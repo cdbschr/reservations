@@ -11,7 +11,6 @@ type ReservationObj = {
 type NewReservationObj = {
   id_user: any;
   place_number: any;
-  created_at: Date;
   date_start?: string;
   date_end?: string;
 };
@@ -134,8 +133,7 @@ export function transformReservationObj(
 ): NewReservationObj {
   const newReservationObj: NewReservationObj = {
     id_user: user?.id,
-    place_number: reservationObj.location,
-    created_at: new Date(),
+    place_number: reservationObj.location
   };
 
   switch (reservationObj.duration) {

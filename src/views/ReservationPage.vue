@@ -11,8 +11,9 @@
     getLocationsByRoom,
     getRooms,
   } from "~/repositories/reservations";
+  import { useReservationStore } from "~/store/reservation";
 
-
+  const store = useReservationStore();
   let showExtraOptions = ref(false);
 
   const toggleExtraOptions = () => {
@@ -44,6 +45,17 @@
       }));
     } else {
       rooms.value = null;
+    }
+
+    const selectedReservation = store.selectedReservation;
+    if (selectedReservation) {
+      reservation.value = {
+        date1: selectedReservation.date_start,
+        date2: selectedReservation.date_end,
+        duration: "",
+        room: "",
+        location: "",
+      };
     }
   });
 
