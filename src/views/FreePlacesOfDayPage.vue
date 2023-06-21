@@ -81,7 +81,10 @@
         </div>
       </div>
       <ModalePage v-model="showModal">
-        <button class="px-4 py-2 bg-lime-300 text-white rounded" @click="createReservationHandler">
+        <button
+          class="px-4 py-2 bg-lime-300 text-white rounded"
+          @click="createReservationHandler"
+        >
           Réserver
         </button>
       </ModalePage>
