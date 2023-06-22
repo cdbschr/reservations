@@ -1,15 +1,13 @@
 import { Reservation } from "~/types/reservation";
-import { supabase } from "./supabaseClient";
+import { getAuthUser, supabase } from "./supabaseClient";
 
-const {
-  data: { user },
-} = await supabase.auth.getUser();
+const auth = await getAuthUser();
 
 export async function getReservationsByUser(): Promise<Reservation[]> {
   const { data: reservations, error } = await supabase
     .from("Reservation")
     .select(`*, Location(*, Area(*, Room(*, Building(*))))`)
-    .eq("id_user", user?.id);
+    .eq("id_user", auth.user?.id);
 
   if (error) {
     console.error(
