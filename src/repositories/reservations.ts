@@ -15,7 +15,7 @@ type NewReservationObj = {
   date_end?: string;
 };
 
-const auth = await getAuthUser();
+const auth = async () => await getAuthUser();
 
 export async function getRooms() {
   const { data: room, error } = await supabase.from("Room").select("id, name");
@@ -126,11 +126,11 @@ export async function getReservations(startDate: Date, endDate: Date) {
   }
 }
 
-export function transformReservationObj(
+export async function transformReservationObj(
   reservationObj: ReservationObj
-): NewReservationObj {
+): Promise<NewReservationObj> {
   const newReservationObj: NewReservationObj = {
-    id_user: auth.user?.id,
+    id_user: (await auth()).user?.id,
     place_number: reservationObj.location
   };
 
