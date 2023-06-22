@@ -33,8 +33,8 @@
     );
   });
 
-  let rooms = ref<any[] | null>(null);
-  let locations = ref<any[] | null>(null);
+  let rooms = ref<any[]>([]);
+  let locations = ref<any[]>([]);
 
   onMounted(async () => {
     const roomsData = await getRooms();
@@ -44,7 +44,7 @@
         text: room.name,
       }));
     } else {
-      rooms.value = null;
+      rooms.value = [];
     }
 
     const selectedReservation = store.selectedReservation;
@@ -113,7 +113,7 @@
             text: location.place_number.toString(),
           }));
         } else {
-          locations.value = null;
+          locations.value = [];
         }
       }
     },

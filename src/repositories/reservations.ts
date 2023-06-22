@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseClient";
+import { getAuthUser, supabase } from "./supabaseClient";
 
 type ReservationObj = {
   date1: string;
@@ -15,9 +15,7 @@ type NewReservationObj = {
   date_end?: string;
 };
 
-const {
-  data: { user },
-} = await supabase.auth.getUser();
+const auth = async () => await getAuthUser();
 
 export async function getRooms() {
   const { data: room, error } = await supabase.from("Room").select("id, name");
@@ -128,11 +126,11 @@ export async function getReservations(startDate: Date, endDate: Date) {
   }
 }
 
-export function transformReservationObj(
+export async function transformReservationObj(
   reservationObj: ReservationObj
-): NewReservationObj {
+): Promise<NewReservationObj> {
   const newReservationObj: NewReservationObj = {
-    id_user: user?.id,
+    id_user: (await auth()).user?.id,
     place_number: reservationObj.location
   };
 

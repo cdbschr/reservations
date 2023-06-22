@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseClient";
+import { getAuthUser, supabase } from "./supabaseClient";
 
 interface Building {
   id: number;
@@ -68,9 +68,7 @@ interface Reservation {
   }
 }
 
-const {
-  data: { user },
-} = await supabase.auth.getUser();
+const auth = async () => await getAuthUser();
 
 export async function getFreePlaces(): Promise<PlaceData[]> {
   const nowStart = new Date();
@@ -147,7 +145,7 @@ export async function createReservation(place_number: string) {
     .from("Reservation")
     .insert([
       {
-        id_user: user?.id,
+        id_user: (await auth()).user?.id,
         date_start: date_hours_start,
         date_end: date_hours_end,
         place_number,
