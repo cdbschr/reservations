@@ -149,7 +149,6 @@
         <label for="date" class="mb-2">Date(s)</label>
         <div class="flex items-center mb-5">
           <InputDate
-            id="date"
             v-model="reservation.date1"
             name="date"
             class="w-5/10"
@@ -157,7 +156,6 @@
           />
           <InputDate
             v-if="showSecondDate"
-            id="date2"
             v-model="reservation.date2"
             name="date2"
             class="w-5/10"
