@@ -1,18 +1,79 @@
-# Vue 3 + TypeScript + Vite
+# Application de reservation de bureaux
+## Description
+Actuellement en phase de développement, cette application permettra de réserver un bureau dans un de nos locaux. 
+Pour l'instant en version mobile.
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Pourquoi avoir utilisé Supabase au lieu de faire un back en NodeJS ?
+- Par manque de temps, je n'avais que 5 jours pour faire une application fonctionnelle
+- Pour tester cette technologie
+- Pour avoir un back en moins à gérer (authentification, base de données, etc.)
 
-## Recommended IDE Setup
+## Fonctionnalités
+- [x] Authentification :
+   - [x] Connexion
+   - [x] Déconnexion
+- [x] Récupération des bureaux :
+   - [x] Tous les bureaux non réservés
+   - [x] Un bureau non réservé
+- [x] Récupération des réservations :
+   - [x] Toutes les réservations de l'utilisateur connecté classé par date
+- [x] Création d'une réservation
+- [x] Suppression d'une réservation
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Fonctionnalités à venir
+- [ ] Création d'un compte
+- [ ] Modification du compte
+- [ ] Mot de passe oublié
+- [ ] Modification d'une réservation
+- [ ] Récupération des réservations d'un utilisateur
+- [ ] Récupération des bureaux d'un utilisateur
 
-## Type Support For `.vue` Imports in TS
+## Stack technique
+- Pnpm
+- VueJS
+- TailwindCSS
+- Typescript
+- Pinia
+- Supabase
+- Docker
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Installation
+### Front
+- Cloner le projet
+```sh
+git clone 
+```
+- Installer les dépendances
+```sh
+pnpm i
+```
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+### Back
+Préalable : avoir installé Docker sur sa machine
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+- Lancer le shell d'installation de Supabase en local
+```sh
+chmod +x setup_supabase.sh
+```
+
+- Pour accéder au front de supabase
+```md
+[http://localhost:8000](http://localhost:8000)
+```
+
+- Les logins à l'installation :
+```js
+{
+   username: 'supabase'
+   password: 'this_password_is_insecure_and_should_be_updated'
+}
+```
+
+## Lancer le projet
+- Copier le fichier .env.example et le renommer en .env
+- Compléter les variables d'environnement
+
+- Lancer le projet
+```sh
+pnpm dev
+```

@@ -130,7 +130,6 @@
     }
   }
 
-  // à delete par la suite
   watch(
     reservation,
     (newVal) => {
